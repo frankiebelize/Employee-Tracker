@@ -26,7 +26,7 @@ const db = mysql.createConnection(
   //............................................
 
   // view all Employees
-
+const viewEmployee = () => {
   app.get('/api/employee', (req, res) => {
     const sql = `SELECT * FROM employee`;
 
@@ -41,9 +41,9 @@ const db = mysql.createConnection(
         });
     });
   });
-
+};
   // view all departments
-
+const viewDepartment = () => {
   app.get('/api/department', (req, res) => {
     const sql = `SELECT * FROM department`;
 
@@ -58,9 +58,9 @@ const db = mysql.createConnection(
         });
     });
   });
-
+};
   // view all roles
-
+const viewRole = () => {
   app.get('/api/role', (req, res) => {
     const sql = `SELECT * FROM role`;
 
@@ -75,7 +75,7 @@ const db = mysql.createConnection(
         });
     });
   });
-
+};
   //.........................................................
 
   // data adding section 
@@ -83,8 +83,8 @@ const db = mysql.createConnection(
   //...........................................................
 
   // add Employees
-
-  pp.post('/api/new-employee', ({ body }, res) => {
+const addEmployee = () => {
+  app.post('/api/new-employee', ({ body }, res) => {
     const sql = `INSERT INTO employee 
     VALUES (?,?,?,?)`;
     const params = [body.first_name, body.last_name, body.role_id, body.manager_id];
@@ -100,11 +100,11 @@ const db = mysql.createConnection(
       });
     });
   });
-
+};
   // add department
 
-
-pp.post('/api/new-department', ({ body }, res) => {
+const addDepartment = () => {
+app.post('/api/new-department', ({ body }, res) => {
     const sql = `INSERT INTO department 
     VALUES (?)`;
     const params = [body.name];
@@ -120,10 +120,10 @@ pp.post('/api/new-department', ({ body }, res) => {
       });
     });
   });
-
+};
   // add roles
-
-  pp.post('/api/new-roles', ({ body }, res) => {
+const addRole = () => {
+  app.post('/api/new-roles', ({ body }, res) => {
     const sql = `INSERT INTO role 
     VALUES (?,?,?)`;
     const params = [body.title, body.salary, body.department_id];
@@ -139,12 +139,12 @@ pp.post('/api/new-department', ({ body }, res) => {
       });
     });
   });
-
+};
 
   //.....................................................
 
   // update role
-
+const updateRole = () => {
   app.put('/api/role/:id', (req, res) => {
     const sql = `UPDATE role SET title = ? WHERE id = ?`;
     const params = [req.body.title, req.params.id];
@@ -165,6 +165,94 @@ pp.post('/api/new-department', ({ body }, res) => {
       }
     });
   });
-  
+};
+const addData = (table) => {
+    switch(table) {
+        case 'add employee':
+        return [
+            {
+                type: 'input',
+                name: 'fist_name',
+                message: `Enter employee's first name`
+            },
+            {
+                type: 'input',
+                name: 'last_name',
+                message: `Enter employee's last name`
+            },
+            {
+                type: 'input',
+                name: 'role_id',
+                message: `Enter employee's role id`
+            },
+            {
+                type: 'input',
+                name: 'manager_name',
+                message: `Enter employee's manager id if applicable`
+            },
+            addEmployee()
+        ];
+        case 'add role':
+            return [
+                {
+                    type: 'input',
+                    name: 'title',
+                    message: `Enter the role`
+                },
+                {
+                    type: 'input',
+                    name: 'salary',
+                    message: `Enter the starting salary for the role`
+                },
+                {
+                    type: 'input',
+                    name: 'department_id',
+                    message: `Enter the id of the corresponding department`
+                },
+                addRole()
+            ];
+        case 'add department':
+            return [
+                {
+                    type: 'input',
+                    name: 'name',
+                    message: `Enter department name`
+                },
+                addDepartment()
+            ];
 
+    }
+};
 
+const mainMenu =(action) => {
+    switch(action) {
+        case 'add data':
+            addData();
+            break;
+        case 'view data':
+            viewData();
+            break;
+        case 'update role':
+          updateRole();
+          break;
+            default:
+            console.log('Invalid choice');
+    }     
+};
+
+const viewData = (table) => {
+    switch(table) {
+        case 'view employees':
+            viewEmployee();
+            break;
+        
+        case 'view roles':
+            viewRole();
+            break;
+        
+        case 'view departments':
+          viewDepartment();
+          break;
+          default:    
+    }
+};
