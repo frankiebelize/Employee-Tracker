@@ -224,8 +224,8 @@ const addData = (table) => {
     }
 };
 
-const mainMenu =(action) => {
-    switch(action) {
+const mainMenu =(answers) => {
+    switch(answers) {
         case 'add data':
             addData();
             break;
@@ -256,3 +256,26 @@ const viewData = (table) => {
           default:    
     }
 };
+function main() {
+console.log(`==========================================`);
+inquirer.prompt([
+  {
+    type: 'list',
+    name: 'ans',
+    message: 'Employee tracker',
+    choices: ['add data', 'view data', 'update role'],
+  }
+]) 
+.then((answers) => {
+  // Handle the user's responses
+  console.log('User responses:', answers);
+  mainMenu(answers);
+})
+.catch((error) => {
+  console.error('Error during inquirer prompt:', error);  
+})
+
+
+};
+
+main();
